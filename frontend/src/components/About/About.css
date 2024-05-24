@@ -1,0 +1,22 @@
+.firstConatiner{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5vh
+}
+
+
+
+.text{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.image img {
+    width: 30vw; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 100%; /* Ensure it doesn't exceed the container width */
+  }

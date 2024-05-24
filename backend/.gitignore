@@ -1,0 +1,10 @@
+venv/
+.venv/
+
+.vscode/
+.idea/
+*.iml
+*.pyc
+*.pyo
+*.pyd
+*.db
