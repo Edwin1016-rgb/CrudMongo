@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {Collapse, Dropdown} from "react-bootstrap";
 import "./Users.css";
 
 const API = process.env.REACT_APP_API;
@@ -7,6 +8,8 @@ const Users = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [phoneNumbersOpen, setPhoneNumbersOpen] = useState(false);
+    const [phoneNumbers, setPhoneNumbers] = useState([""]);
     const [editing, setEditing] = useState(false);
     const [id, setId] = useState("");
     const [users, setUsers] = useState([]);
@@ -28,6 +31,7 @@ const Users = () => {
                     name,
                     email,
                     password,
+                    phone_numbers: phoneNumbers,
                 }),
             });
         } else {
@@ -40,6 +44,7 @@ const Users = () => {
                     name,
                     email,
                     password,
+                    phone_numbers: phoneNumbers,
                 }),
             });
             setEditing(false);
@@ -51,6 +56,8 @@ const Users = () => {
         setName("");
         setEmail("");
         setPassword("");
+        setPhoneNumbers([""]);
+        setPhoneNumbersOpen(false);
     };
 
     const getUsers = async () => {
@@ -81,6 +88,8 @@ const Users = () => {
         setName(data.name);
         setEmail(data.email);
         setPassword(data.password);
+        setPhoneNumbers(data.phone_numbers || [""]);
+        setPhoneNumbersOpen(!!data.phone_numbers);
         setEditing(true);
         setId(id);
     };
@@ -90,6 +99,13 @@ const Users = () => {
         setSearchEmail("");
         getUsers();
     }
+
+    const handleRemovePhoneNumber = (index) => {
+        const newPhoneNumbers = [...phoneNumbers];
+        newPhoneNumbers.splice(index, 1);
+        setPhoneNumbers(newPhoneNumbers);
+    };
+
 
     const handleSearch = async () => {
         if (!searchName && !searchEmail) return getUsers();
@@ -117,9 +133,29 @@ const Users = () => {
         }
     };
 
+    const handleAddPhoneNumber = () => {
+        setPhoneNumbers([...phoneNumbers, ""]);
+    };
+    const handlePhoneNumberChange = (index, event) => {
+        const newPhoneNumbers = [...phoneNumbers];
+        newPhoneNumbers[index] = event.target.value;
+        setPhoneNumbers(newPhoneNumbers);
+    };
+
+    const handlePhoneNumberTypeChange = (index, event) => {
+        const newPhoneNumbers = [...phoneNumbers];
+        newPhoneNumbers[index] = {...newPhoneNumbers[index], type: event.target.value};
+        setPhoneNumbers(newPhoneNumbers);
+    };
+
+    const handlePhoneNumberNumberChange = (index, event) => {
+        const newPhoneNumbers = [...phoneNumbers];
+        newPhoneNumbers[index] = {...newPhoneNumbers[index], number: event.target.value};
+        setPhoneNumbers(newPhoneNumbers);
+    };
     return (
         <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-3">
                 <form onSubmit={handleSubmit} className="card card-body">
                     <div className="form-group">
                         <input
@@ -147,6 +183,49 @@ const Users = () => {
                             placeholder="Password"
                         />
                     </div>
+                    <button
+                        onClick={() => setPhoneNumbersOpen(!phoneNumbersOpen)}
+                        type="button"
+                        className="btn btn-primary btn-block mt-2"
+                    >
+                        {phoneNumbersOpen ? "Close Phone Numbers" : "Open Phone Numbers"}
+                    </button>
+                    <Collapse in={phoneNumbersOpen}>
+                        <div>
+                            {phoneNumbers.map((phoneNumber, index) => (
+                                <div key={index} className="input-group mt-2">
+                                    <input
+                                        type="text"
+                                        value={phoneNumber.type}
+                                        onChange={(event) => handlePhoneNumberTypeChange(index, event)}
+                                        className="form-control"
+                                        placeholder="Type"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={phoneNumber.number}
+                                        onChange={(event) => handlePhoneNumberNumberChange(index, event)}
+                                        className="form-control"
+                                        placeholder="Number"
+                                    />
+                                    <button
+                                        onClick={() => handleRemovePhoneNumber(index)}
+                                        type="button"
+                                        className="btn btn-danger"
+                                    >
+                                        -
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                onClick={handleAddPhoneNumber}
+                                type="button"
+                                className="btn btn-secondary btn-block mt-2"
+                            >
+                                Add Phone Number
+                            </button>
+                        </div>
+                    </Collapse>
                     <button className="btn btn-primary btn-block">
                         {editing ? "Update" : "Create"}
                     </button>
@@ -192,6 +271,7 @@ const Users = () => {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Password</th>
+                        <th>Phone Numbers</th>
                         <th>Operations</th>
                     </tr>
                     </thead>
@@ -201,6 +281,25 @@ const Users = () => {
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.password}</td>
+                            <td>
+                                {user.phone_numbers ? (
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                            Phone Numbers
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            {user.phone_numbers.map((phoneNumber, index) => (
+                                                <Dropdown.Item key={index}>
+                                                    {phoneNumber.type.charAt(0).toUpperCase() + phoneNumber.type.slice(1)} Phone: {phoneNumber.number}
+                                                </Dropdown.Item>
+                                            ))}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                ) : (
+                                    <p className="text-muted">N/A</p>
+                                )}
+                            </td>
                             <td>
                                 <button
                                     className="btn btn-secondary btn-sm btn-block"

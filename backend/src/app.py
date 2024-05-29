@@ -11,10 +11,12 @@ db = mongo.db.users
 
 @app.route('/users', methods=['POST'])
 def createUser():
+    phone_numbers = request.json['phone_numbers'] if 'phone_numbers' in request.json else []
     result = db.insert_one({
         'name': request.json['name'],
         'email': request.json['email'],
-        'password': request.json['password']
+        'password': request.json['password'],
+        'phone_numbers': phone_numbers
     })
     return jsonify(str(ObjectId(result.inserted_id)))
 
@@ -31,7 +33,8 @@ def getUsers():
             '_id': str(ObjectId(doc['_id'])),
             'name': doc['name'],
             'email': doc['email'],
-            'password': doc['password']
+            'password': doc['password'],
+            'phone_numbers': doc['phone_numbers'] if 'phone_numbers' in doc else []
         })
 
     total_users = db.count_documents({})
@@ -52,17 +55,21 @@ def getUser(id):
         '_id': str(ObjectId(myUser['_id'])),
         'name': myUser['name'],
         'email': myUser['email'],
-        'password': myUser['password']
+        'password': myUser['password'],
+        'phone_numbers': myUser['phone_numbers'] if 'phone_numbers' in myUser else []
     })
 
 
 @app.route('/users/<id>', methods=['PUT'])
 def updateUser(id):
+    phone_numbers = request.json['phone_numbers'] if 'phone_numbers' in request.json else []
     db.update_one({'_id': ObjectId(id)}, {'$set': {
         'name': request.json['name'],
         'email': request.json['email'],
-        'password': request.json['password']
+        'password': request.json['password'],
+        'phone_numbers': phone_numbers
     }})
+    print(request.json)
     return jsonify({'message': 'User ' + id + ' was updated'})
 
 
@@ -94,9 +101,10 @@ def searchUsers():
             '_id': str(ObjectId(user['_id'])),
             'name': user['name'],
             'email': user['email'],
-            'password': user['password']
+            'password': user['password'],
+            'phone_numbers': user['phone_numbers'] if 'phone_numbers' in user else []
         })
-
+    print(search_results)
     return jsonify({'users': search_results}), 200
 
 
