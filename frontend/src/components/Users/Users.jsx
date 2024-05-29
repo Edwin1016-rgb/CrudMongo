@@ -10,6 +10,9 @@ const Users = () => {
   const [editing, setEditing] = useState(false);
   const [id, setId] = useState("");
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [limit] = useState(10);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,10 +52,12 @@ const Users = () => {
     setPassword("");
   };
 
-  const getUsers = async () => {
-    const res = await fetch(`${API}/users`);
+  const getUsers = async (pageNumber = 1) => {
+    const res = await fetch(`${API}/users?page=${pageNumber}&limit=${limit}`);
     const data = await res.json();
-    setUsers(data);
+    setUsers(data.users);
+    setTotal(data.total);
+    setPage(data.page);
   };
 
   useEffect(() => {
@@ -67,7 +72,7 @@ const Users = () => {
       });
       const data = await res.json();
       console.log(data);
-      getUsers();
+      getUsers(page);
     }
   };
 
@@ -79,6 +84,18 @@ const Users = () => {
     setPassword(data.password);
     setEditing(true);
     setId(id);
+  };
+
+  const nextPage = () => {
+    if (page * limit < total) {
+      getUsers(page + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (page > 1) {
+      getUsers(page - 1);
+    }
   };
 
   return (
@@ -151,6 +168,14 @@ const Users = () => {
             ))}
           </tbody>
         </table>
+        <div className="pagination">
+          <button onClick={prevPage} disabled={page === 1}>
+            Previous
+          </button>
+          <button onClick={nextPage} disabled={page * limit >= total}>
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

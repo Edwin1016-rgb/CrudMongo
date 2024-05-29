@@ -44,3 +44,21 @@
     text-decoration: underline;
 }
 
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button{
+    margin: 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    background-color: #f9f9f9;
+}
+
+.pagination button:hover{
+    background-color: #e9e05e;
+}

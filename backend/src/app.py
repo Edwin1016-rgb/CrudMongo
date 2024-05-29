@@ -19,19 +19,31 @@ def createUser():
     })
     return jsonify(str(ObjectId(result.inserted_id)))
 
-
 @app.route('/users', methods=['GET'])
 def getUsers():
-    userslist=[]
-    for doc in db.find():
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=10, type=int)
+    skips = limit * (page - 1)
+    
+    userslist = []
+    for doc in db.find().skip(skips).limit(limit):
         userslist.append({
-            '_id':str(ObjectId(doc['_id'])),
-            'name':doc['name'],
-            'email':doc['email'],
-            'password':doc['password']
+            '_id': str(ObjectId(doc['_id'])),
+            'name': doc['name'],
+            'email': doc['email'],
+            'password': doc['password']
         })
-    return jsonify(userslist)
+    
+    total_users = db.count_documents({})
+    
+    return jsonify({
+        'users': userslist,
+        'total': total_users,
+        'page': page,
+        'limit': limit
+    })
 
+    
 @app.route('/users/<id>', methods=['GET'])
 def getUser(id):
     myUser = db.find_one({'_id':ObjectId(id)})
