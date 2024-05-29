@@ -1,9 +1,11 @@
 from flask import Flask , request , jsonify
 from flask_pymongo import PyMongo, ObjectId
 from flask_cors import CORS
+from pymongo import MongoClient
 
 app = Flask (__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/crudDB"
+#app.config["MONGO_URI"] = "mongodb://localhost:27017/crudDB"#
+app.config["MONGO_URI"] = "mongodb+srv://admin:admin@cluster0.t7xbwjf.mongodb.net/crudDB?retryWrites=true&w=majority&appName=Cluster0"
 mongo = PyMongo(app)
 CORS(app)
 db= mongo.db.users
@@ -41,10 +43,6 @@ def getUser(id):
         'password':myUser['password']
     })
 
-@app.route('/users/<id>', methods=['DELETE'])
-def deleteUser(id):
-    db.delete_one({'_id':ObjectId(id)})
-    return jsonify({'message':'User '+id+' was deleted'})
 
 @app.route('/users/<id>', methods=['PUT'])
 def updateUser(id):
@@ -56,10 +54,37 @@ def updateUser(id):
     return jsonify({'message':'User '+id+' was updated'})
 
 
+@app.route('/users/<id>', methods=['DELETE'])
+def deleteUser(id):
+    db.delete_one({'_id':ObjectId(id)})
+    return jsonify({'message':'User '+id+' was deleted'})
+
+
+@app.route('/search', methods=['GET'])
+def searchUsers():
+    search_type = request.args.get('type')
+    query = request.args.get('query')
+
+    if not search_type or not query:
+        return jsonify({'message': 'Faltan parámetros de búsqueda'}), 400
+
+    if search_type == 'name':
+        users = db.find({'name': {'$regex': query, '$options': 'i'}})
+    elif search_type == 'email':
+        users = db.find({'email': {'$regex': query, '$options': 'i'}})
+    else:
+        return jsonify({'message': 'Invalid search type'}), 400
+
+    search_results = []
+    for user in users:
+        search_results.append({
+            '_id': str(ObjectId(user['_id'])),
+            'name': user['name'],
+            'email': user['email'],
+            'password': user['password']
+        })
+
+    return jsonify({'users': search_results}), 200
+
 if __name__ == "__main__": 
     app.run(debug=True)
-
-
-
-
-

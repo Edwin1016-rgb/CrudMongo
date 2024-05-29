@@ -1,0 +1,120 @@
+  
+  .mainSearch{
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+  }
+
+  .mainSearch h1{
+    text-align: center;
+    margin-top: 20px;
+  }
+
+
+  .search{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+    margin: auto;
+    width: 90%;
+  }
+
+  .search label {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .search .btnSearch{
+    color: rgb(0, 0, 0);
+    border-radius: 12px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .inputSearch{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 10px;
+    font-size: 16px;
+    width: 50%;
+    margin: auto;
+  }
+
+  .inputSearch input{
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 12px;
+    border: 1px solid black;
+  }
+
+  .inputSearch button{
+    color: rgb(0, 0, 0);
+    padding: 20px 17px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+  }
+
+  .inputSearch button:hover{
+    transform: scale(1.1);
+    color: #000;
+    background-color: #e9e05e;
+  }
+
+  .btnSearch:hover{
+    transform: scale(1.1);
+  }
+
+  .container-table h2{
+    text-align: center;
+    margin-top: 30px;
+    color: #23299b;
+    margin: 40px 0 40px 0;
+  }
+
+  .container-table table{
+    width: 100%;
+   border-radius: 12px;
+   border: 2px solid black;
+  }
+
+
+  .search-container select,
+  .search-container input[type="text"],
+  .search-container button {
+    margin-right: 10px;
+  }
+  
+  .search-results table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .search-results th,
+  .search-results td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .search-results th {
+    background-color: #f2f2f2;
+  }
+  
+  .search-results tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  

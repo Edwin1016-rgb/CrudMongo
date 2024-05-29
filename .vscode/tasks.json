@@ -1,0 +1,51 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Backend App - Change Directory",
+            "type": "shell",
+            "command": "cd backend",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Run Backend App",
+            "type": "shell",
+            "command": ".\\src\\app.py",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "dependsOn": "Run Backend App - Change Directory",
+            "group": "build",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Run Frontend - Change Directory",
+            "type": "shell",
+            "command": "cd frontend",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Run Frontend",
+            "type": "shell",
+            "command": "npm start",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "dependsOn": "Run Frontend - Change Directory",
+            "group": "build",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}

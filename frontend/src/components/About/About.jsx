@@ -10,8 +10,8 @@ const About = () => {
           <h2>Integrantes</h2>
           <ul>
             <li>Edwin Camilo Becerra Meche - 202023070</li>
-            <li>Santiago Andres Orjuela - </li>
-            <li>Laura Daniela </li>
+            <li>Santiago Andres Orjuela López - 202114334</li>
+            <li>Laura Vanesa Fernandez Barreto - 202115100</li>
           </ul>
         </div>
       </div>
